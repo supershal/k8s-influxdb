@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels: null
+  name: influxdb-grafana-svc
+  namespace: infra
+spec:
+  type: NodePort
+  ports:
+  - name: http
+    port: 3000
+    targetPort: 8083 
+  selector:
+    app: influxGrafana

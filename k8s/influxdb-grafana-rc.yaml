@@ -1,0 +1,42 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    app: influxGrafana
+  name: influxdb-grafana-rc
+  namespace: infra
+spec:
+  replicas: 1
+  selector:
+    app: influxGrafana
+  template:
+    metadata:
+      labels:
+        app: influxGrafana
+    spec:
+      containers:
+      - name: grafana
+        image: grafana/grafana
+        env:
+          #- name: INFLUXDB_SERVICE_URL
+          #  value: http://influxdb-svc:8086
+            # The following env variables are required to make Grafana accessible via
+            # the kubernetes api-server proxy. On production clusters, we recommend
+            # removing these env variables, setup auth for grafana, and expose the grafana
+            # service using a LoadBalancer or a public IP.
+          - name: GF_AUTH_BASIC_ENABLED
+            value: "false"
+          - name: GF_AUTH_ANONYMOUS_ENABLED
+            value: "true"
+          - name: GF_AUTH_ANONYMOUS_ORG_ROLE
+            value: Admin
+          - name: GF_SECURITY_ADMIN_PASSWORD
+            value: secret
+          - name: GF_SERVER_ROOT_URL
+            value: http://influxdb-grafana-svc:3000
+        volumeMounts:
+        - mountPath: /var
+          name: grafana-storage
+      volumes:
+      - name: grafana-storage
+        emptyDir: {}
