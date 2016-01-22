@@ -107,34 +107,44 @@ If you are not making any code changes and/or building docker image for influxdb
 
 1. Install GO latest version and set up go workspace. [Instructions]
 2. Install godep
+	
 	```
 		$ go get -u github.com/tools/godep
 	```
 3. Restore dependency
+	
 	```
 		$ godep restore
 	```
 4. Install and test influxdbconfig program locally.
-	- Build go binary for testing.
-	  ```
+    
+     - Build go binary for testing.
+
+      ```
 		$ go build -o influxdblocal ./influxdb/main.go
       ```
     - Setup kubectl proxy to proxy influxdb api server
+      
       ```
       	$ kubectl proxy --port=9090 &
       ```
     - test locally. 
+      
       ```
       	$ LOCAL_PROXY="http://localhost:9090" INFLUXDB_POD_SELECTORS="app=influxdb" NAMESPACE="infra" ./influxdblocal test
       ```
       It will spit out the the influxdb cluster config parameters to console.
 4. build influxdbconfig executable from the go program and create docker image for influxdbconfig + influxdb
+
 	- Create docker-machine vm and set docker daemon
+
 	 ```
 	 	$ docker-machine create --driver=virtualbox default
 	 	$ eval "$(docker-machine env default)"
 	 ```
+
 	- build the image
+
 	 ```
 		$ ./influxdb/build.sh
 	 ```
@@ -143,15 +153,18 @@ If you are not making any code changes and/or building docker image for influxdb
   - (Faster) Copy image directly to k8s minion. Use this method if you frequently building the image.
     * One time setup for ssh to minion.
     	Go to your kubernetes installation and locate Vagrantfile.
+  	
   		```
   			$ vagrant ssh-config
   		```
   		Copy output of above command to your ~/.ssh/config file.
     * copy the image from docker-machine VM to K8S minion.
+    	
     	```
     		$ docker save supershal/influxdb:stresstest | ssh vagrant@minion-1 sudo docker load
     	```
   - (Slower) push to docker hub. 
+  	
   	 ```
   	 	$ docker push supershal/influxdb:stresstest
   	 ```
