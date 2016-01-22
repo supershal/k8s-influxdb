@@ -11,10 +11,12 @@
 
 ## Deploy influxdb cluster to local kubernetes cluster
 - Create "infra" namespace
+	
 	```
 		$ kubectl create -f ./k8s/infra-namespace.yaml
 	```
 - Set default namespace to "infra"
+	
 	```
 		$ export CONTEXT=$(kubectl config view | grep current-context | awk '{print $2}')
 		$ kubectl config set-context $(CONTEXT) --namespace=<insert-namespace-name-here>
