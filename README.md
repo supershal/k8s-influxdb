@@ -85,20 +85,24 @@
 	```
 	 $ kubectl delete svc influxdb-svc
 	``` 
+	
 - delete influxdb rc
 	```
  	 $ kubectl delete rc -l app=influxdb
 	```
+	
 - delete grafana service
 	```
 	 $ kubectl delete svc influxdb-grafana-svc
 	``` 
+	
 - delete grafana rc
 	```
  	 $ kubectl delete rc influxdb-grafana-rc
 	```
 
 ## Build influxdb docker image
+
 If you are not making any code changes and/or building docker image for influxdb, you can skip this section.
 1. Install GO latest version and set up go workspace. [Instructions]
 2. Install godep
