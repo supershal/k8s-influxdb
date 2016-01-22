@@ -1,0 +1,39 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  labels:
+    app: influxdb
+  name: influxdb-raft-rc
+  namespace: infra
+spec:
+  replicas: 1
+  selector:
+    app: influxdb
+    type: raft
+  template:
+    metadata:
+      labels:
+        app: influxdb
+        type: raft
+    spec:
+      containers:
+      - name: influxdb
+        image: supershal/influxdb:stresstest
+        env:
+        - name: NAMESPACE
+          value: infra
+        - name: INFLUXDB_POD_SELECTORS
+          value: app=influxdb
+        volumeMounts:
+        - mountPath: /data
+          name: influxdb-storage
+        ports:
+        - name: http
+          containerPort: 8083
+        - name: api
+          containerPort: 8086
+        - name: cluster
+          containerPort: 8088
+      volumes:
+        - name: influxdb-storage
+          emptyDir: {}
