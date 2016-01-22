@@ -50,6 +50,7 @@
 	```
 		$ kubectl create -f ./k8s/influxdb-grafana-rc.yaml
 	```
+
 ## Verify cluster setup
 - ssh to k8s minion
 	```
