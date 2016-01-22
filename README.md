@@ -80,6 +80,7 @@
 			5	10.246.98.52:8088	false	false
 			6	10.246.98.54:8088	false	false
 	```
+
 ## Terminate cluster
 - delete influxdb service
 	```
