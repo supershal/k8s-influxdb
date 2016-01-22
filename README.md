@@ -104,6 +104,7 @@
 ## Build influxdb docker image
 
 If you are not making any code changes and/or building docker image for influxdb, you can skip this section.
+
 1. Install GO latest version and set up go workspace. [Instructions]
 2. Install godep
 	```
