@@ -7,5 +7,6 @@ docker run -d \
   -p 8083:8083 \
   -p 8086:8086 \
   -p 8090:8090 \
-  -p  8099:8099 \
-  --name influxdb supershal/influxdb:stresstest
+  -p 8099:8099 \
+  -p 8091:8091 \
+  --name influxdb supershal/influxdb:latest

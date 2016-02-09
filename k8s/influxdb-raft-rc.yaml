@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
       - name: influxdb
-        image: supershal/influxdb:stresstest
+        image: supershal/influxdb:latest
         env:
         - name: NAMESPACE
           value: infra

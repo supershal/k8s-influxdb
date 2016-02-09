@@ -22,7 +22,7 @@ var (
 	// os envs for getting influx db pods
 	influxSelectors   = os.Getenv("INFLUXDB_POD_SELECTORS") // app=influxdb
 	namespace         = os.Getenv("NAMESPACE")              // infra
-	influxClusterPort = "8088"
+	influxClusterPort = "8091"
 	envVarFile        = "/etc/default/influxdb"
 )
 
@@ -202,11 +202,10 @@ func influxdbPeers(hostIP string, podIPs []string) []string {
 	return peers
 }
 
-// INFLUXD_OPTS="-join hostname_1:port_1,hostname_2:port_2 -hostname hostIP:port"
-func influxdOpts(hostIP string, peers []string) string {
-	hostvar := "-hostname " + hostIP + ":" + influxClusterPort
+// INFLUXD_OPTS="-join hostname_1:port_1,hostname_2:port_2"
+func influxdOpts(_ string, peers []string) string {
 	if len(peers) == 0 {
-		return "INFLUXD_OPTS=\"" + hostvar + "\""
+		return ""
 	}
 	var acc string
 
@@ -220,6 +219,29 @@ func influxdOpts(hostIP string, peers []string) string {
 	}
 	acc = acc[:len(acc)-1]
 	joinPeersOpt := "-join " + acc
-	influxdOpt := joinPeersOpt + " " + hostvar
+	influxdOpt := joinPeersOpt
 	return "INFLUXD_OPTS=\"" + influxdOpt + "\""
 }
+
+// // INFLUXD_OPTS="-join hostname_1:port_1,hostname_2:port_2 -hostname hostIP:port"
+// ENABle below function for influxdb < 0.10
+// func influxdOpts(hostIP string, peers []string) string {
+// 	hostvar := "-hostname " + hostIP + ":" + influxClusterPort
+// 	if len(peers) == 0 {
+// 		return "INFLUXD_OPTS=\"" + hostvar + "\""
+// 	}
+// 	var acc string
+
+// 	// max 3 peers allowed.
+// 	if len(peers) > 3 {
+// 		peers = peers[:3]
+// 	}
+
+// 	for _, peer := range peers {
+// 		acc = acc + peer + ":" + influxClusterPort + ","
+// 	}
+// 	acc = acc[:len(acc)-1]
+// 	joinPeersOpt := "-join " + acc
+// 	influxdOpt := joinPeersOpt + " " + hostvar
+// 	return "INFLUXD_OPTS=\"" + influxdOpt + "\""
+// }

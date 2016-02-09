@@ -5,10 +5,10 @@ metadata:
   name: influxdb-grafana-svc
   namespace: infra
 spec:
-  type: NodePort
+  type: LoadBalancer
   ports:
   - name: http
     port: 3000
-    targetPort: 8083 
+    targetPort: 3000 
   selector:
     app: influxGrafana

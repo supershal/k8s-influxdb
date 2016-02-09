@@ -1,18 +1,24 @@
-reporting-disabled = false
+reporting-disabled = true
 
 [meta]
-  dir = "/data/meta"
-  hostname = "localhost"
+  enabled = true
+  dir = "/data/meta" 
   bind-address = ":8088"
+  http-bind-address = ":8091"
   retention-autocreate = true
-  election-timeout = "1s"
-  heartbeat-timeout = "1s"
-  leader-lease-timeout = "500ms"
-  commit-timeout = "50ms"
+  election-timeout = "5s"
+  heartbeat-timeout = "5s"
+  leader-lease-timeout = "1000ms"
+  commit-timeout = "100ms"
   cluster-tracing = false
+  raft-promotion-enabled = true
+  logging-enabled = true
+  lease-duration = "1m0s"
 
 [data]
+  enabled = true
   dir = "/data/data"
+  engine = "tsm1"
   max-wal-size = 104857600
   wal-flush-interval = "10m0s"
   wal-partition-flush-delay = "2s"
@@ -22,13 +28,21 @@ reporting-disabled = false
   wal-compaction-threshold = 0.5
   wal-max-series-size = 1048576
   wal-flush-cold-interval = "5s"
-  wal-partition-size-threshold = 20971520
+  wal-partition-size-threshold = 52428800
+  query-log-enabled = true
+  cache-max-memory-size = 524288000
+  cache-snapshot-memory-size = 26214400
+  cache-snapshot-write-cold-duration = "1h0m0s"
+  compact-full-write-cold-duration = "24h0m0s"
+  max-points-per-block = 0
+  data-logging-enabled = false
 
 [cluster]
-  force-remote-mapping = false
-  write-timeout = "5s"
-  shard-writer-timeout = "5s"
-  shard-mapper-timeout = "5s"
+  force-remote-mapping = true
+  write-timeout = "15s"
+  shard-writer-timeout = "15s"
+  max-remote-write-connections = 3
+  shard-mapper-timeout = "15s"
 
 [retention]
   enabled = true
@@ -49,6 +63,9 @@ reporting-disabled = false
   store-enabled = true
   store-database = "_internal"
   store-interval = "10s"
+
+[subscriber]
+  enabled = true
 
 [http]
   enabled = true
