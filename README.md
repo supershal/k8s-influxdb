@@ -51,6 +51,7 @@
 	```
 		$ kubectl create -f ./k8s/influxdb-grafana-rc.yaml
 	```
+	
 ## Verify cluster setup
 - ssh to k8s minion
 	```
@@ -79,6 +80,7 @@
 			5	10.246.98.52:8088	false	false
 			6	10.246.98.54:8088	false	false
 	```
+
 ## Terminate cluster
 - delete influxdb service
 	```
