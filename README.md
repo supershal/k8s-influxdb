@@ -4,13 +4,21 @@
 	 - create influxdb cluster in kubernetes.
 	 - configure influxdb cluster.
 	 - Stress Test influxdb cluster.
-	 - Tune influxdb configs for Apigee requirements.
+	 - Tune influxdb configs to achieve current usecases.
 
 ## Prerequisites
 - [docker-machine] (https://docs.docker.com/engine/installation/mac/)
-- [kubernetes with vagrant] (http://kubernetes.io/v1.1/docs/getting-started-guides/vagrant.html)
+- Local Machine:
+  [kubernetes with OSX] (https://github.com/TheNewNormal/kube-solo-osx)
+    or
+  [kubernetes with vagrant] (http://kubernetes.io/v1.1/docs/getting-started-guides/vagrant.html)
+- AWS:
+  [kubernetes with coreos] (https://coreos.com/kubernetes/docs/latest/kubernetes-on-aws.html)
 
-## Deploy influxdb cluster to local kubernetes cluster
+## Influxdb version
+   0.10.0-1
+
+## Deploy influxdb cluster to kubernetes cluster
 - Create "infra" namespace
 	```
 		$ kubectl create -f ./k8s/infra-namespace.yaml
@@ -42,6 +50,11 @@
 	```
 		$ kubectl scale --replicas=4 rc/influxdb-peers-rc
 	```
+	6. deploy test data producers
+	```
+		$ kubectl create -f ./k8s/telegraf-rc.yaml
+	```
+
 - Deploy grafana service
 	1. deploy grafana service
 	```
@@ -71,14 +84,27 @@
 	```
 	It should give all members of the cluser something like.
 	```
-		> show servers
-			id	cluster_addr		raft	raft-leader
-			1	10.246.98.49:8088	true	true
-			2	10.246.98.50:8088	true	false
-			3	10.246.98.51:8088	true	false
-			4	10.246.98.53:8088	false	false
-			5	10.246.98.52:8088	false	false
-			6	10.246.98.54:8088	false	false
+> show servers
+name: data_nodes
+----------------
+id	http_addr		tcp_addr
+1	10.244.1.7:8086		10.244.1.7:8088
+4	10.244.2.190:8086	10.244.2.190:8088
+5	10.244.1.179:8086	10.244.1.179:8088
+7	10.244.2.194:8086	10.244.2.194:8088
+9	10.244.3.237:8086	10.244.3.237:8088
+11	10.244.2.66:8086	10.244.2.66:8088
+
+
+name: meta_nodes
+----------------
+id	http_addr		tcp_addr
+1	10.244.1.7:8091		10.244.1.7:8088
+2	10.244.2.190:8091	10.244.2.190:8088
+3	10.244.1.179:8091	10.244.1.179:8088
+6	10.244.2.194:8091	10.244.2.194:8088
+8	10.244.3.237:8091	10.244.3.237:8088
+10	10.244.2.66:8091	10.244.2.66:8088
 	```
 
 ## Terminate cluster
@@ -97,6 +123,10 @@
 - delete grafana rc
 	```
  	 $ kubectl delete rc influxdb-grafana-rc
+	```
+- delete telegraf(data producers) rc
+	```
+ 	 $ kubectl delete rc telegraf-rc
 	```
 
 ## Build influxdb docker image
