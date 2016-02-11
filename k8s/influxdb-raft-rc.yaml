@@ -23,7 +23,9 @@ spec:
         - name: NAMESPACE
           value: infra
         - name: INFLUXDB_POD_SELECTORS
-          value: app=influxdb
+          value: app=influxdb,type=raft
+        - name: INFLUXDB_DATA_ENABLED
+          value: "false"
         volumeMounts:
         - mountPath: /data
           name: influxdb-storage

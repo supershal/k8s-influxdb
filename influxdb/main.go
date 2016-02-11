@@ -20,7 +20,7 @@ var (
 	//os envs for testing locally.
 	localProxy = os.Getenv("LOCAL_PROXY")
 	// os envs for getting influx db pods
-	influxSelectors   = os.Getenv("INFLUXDB_POD_SELECTORS") // app=influxdb
+	influxSelectors   = os.Getenv("INFLUXDB_POD_SELECTORS") // app=influxdb,type=raft
 	namespace         = os.Getenv("NAMESPACE")              // infra
 	influxClusterPort = "8091"
 	envVarFile        = "/etc/default/influxdb"
